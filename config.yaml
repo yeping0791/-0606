@@ -1,0 +1,32 @@
+mode: rule
+mixed-port: 7890
+allow-lan: false
+log-level: warning
+ipv6: true
+external-controller: 127.0.0.1:9090
+secret: ""
+dns:
+  enable: true
+  ipv6: false
+  listen: 0.0.0.0:53
+  enhanced-mode: redir-host
+  nameserver:
+    - 114.114.114.114
+    - 8.8.8.8
+proxies:
+  - name: "proxy1"
+    type: ss
+    server: "your_server_ip"
+    port: 8388
+    cipher: "chacha20-ietf-poly1305"
+    password: "your_password"
+proxy-groups:
+  - name: "Proxy"
+    type: select
+    proxies:
+      - "proxy1"
+rules:
+  - DOMAIN-SUFFIX,google.com,Proxy
+  - DOMAIN-SUFFIX,github.com,Proxy
+  - GEOIP,CN,DIRECT
+  - MATCH,Proxy
